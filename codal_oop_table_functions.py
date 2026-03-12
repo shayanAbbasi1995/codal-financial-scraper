@@ -219,7 +219,9 @@ class codal_table:
                     x = cls.body_table(soup)
                     print('body_table')
                     return x
-class make_file :
+
+
+class make_file:
     @staticmethod
     def make_empty_cells(data):
         i = 0
@@ -238,7 +240,7 @@ class make_file :
     @staticmethod
     def make_excel(name, stock_id, data, attribute):
         wb = Workbook()
-        wb.save('codal'+ '\\' + stock_id + '\\' + name + '.xlsx')
+        wb.save(os.path.join('codal', stock_id, name + '.xlsx'))
 
         x = []
         x.append(name)
@@ -255,27 +257,20 @@ class make_file :
                 except:
                     temp.append(data[i][j].give_data())
             ws.append(temp)
-        wb.save('codal'+ '\\' + stock_id + '\\' + name + '.xlsx')
+        wb.save(os.path.join('codal', stock_id, name + '.xlsx'))
 
     @staticmethod
     def make_folder(id):
-        try:
-            os.mkdir('codal')
-        except:
-            pass
-        try:
-            os.mkdir('codal' + '\\' +str(id))
-        except:
-            pass
+        os.makedirs(os.path.join('codal', str(id)), exist_ok=True)
 
     @staticmethod
     def make_sub_file(stock_id, company, sub_id, company_state_code):
         try:
-            wb = openpyxl.load_workbook('codal'+ '\\' + stock_id + '\\' + stock_id + ".xlsx")
+            wb = openpyxl.load_workbook(os.path.join('codal', stock_id, stock_id + ".xlsx"))
             ws = wb.active
         except:
             wb = Workbook()
-            wb.save('codal'+ '\\' + stock_id + '\\' + stock_id + ".xlsx")
+            wb.save(os.path.join('codal', stock_id, stock_id + ".xlsx"))
             ws = wb.active
             ws.title = "Page 1"
             ws.cell(row=1, column=1).value = 'Stock id'
@@ -293,24 +288,24 @@ class make_file :
             for j in range(10, 100):
                 ws.cell(row=j + 3, column=1).value = str(j)
 
-        if sub_id == None and ws.cell(row=2, column=2).value == None:
+        if sub_id is None and ws.cell(row=2, column=2).value is None:
             ws.cell(row=2, column=2).value = str(company)
             ws.cell(row=2, column=3).value = company_state_code
-        if sub_id != None:
+        if sub_id is not None:
             for i in range(1, 100):
-                if int(sub_id) == i and ws.cell(row=i + 3, column=2).value == None:
+                if int(sub_id) == i and ws.cell(row=i + 3, column=2).value is None:
                     ws.cell(row=i + 3, column=2).value = str(company)
                     ws.cell(row=i + 3, column=3).value = company_state_code
-        wb.save('codal'+ '\\' + stock_id + '\\' + stock_id + ".xlsx")
+        wb.save(os.path.join('codal', stock_id, stock_id + ".xlsx"))
 
     @staticmethod
     def make_error_file(stock_id, stock_type, link):
         try:
-            wb = openpyxl.load_workbook('codal'+ '\\' + stock_id + '\\' + stock_id + '_errors' + ".xlsx")
+            wb = openpyxl.load_workbook(os.path.join('codal', stock_id, stock_id + '_errors.xlsx'))
             ws = wb.active
         except:
             wb = Workbook()
-            wb.save('codal'+ '\\' + stock_id + '\\' + stock_id + '_errors' + ".xlsx")
+            wb.save(os.path.join('codal', stock_id, stock_id + '_errors.xlsx'))
             ws = wb.active
             ws.title = "Page 1"
         x = []
@@ -318,4 +313,4 @@ class make_file :
         x.append(stock_type)
         x.append(link)
         ws.append(x)
-        wb.save('codal'+ '\\' + stock_id + '\\' + stock_id + '_errors' + ".xlsx")
+        wb.save(os.path.join('codal', stock_id, stock_id + '_errors.xlsx'))

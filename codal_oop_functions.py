@@ -39,11 +39,11 @@ class stock_codal:
         self.num_fiscals += 1
 
     def remove_activity(self, index):
-        print('removeeeeeeeeeeeeeeeeeeeeeee', self.all_activities.pop(index))
+        self.all_activities.pop(index)
         self.num_activities -= 1
 
     def remove_fiscal(self, index):
-        print('removeeeeeeeeeeeeeeeeeeeeeee', self.all_fiscals.pop(index))
+        self.all_fiscals.pop(index)
         self.num_fiscals -= 1
 
     def print_name(self):
@@ -77,7 +77,7 @@ class stock_codal:
         ids = list(sheet.columns)[id_column]
         x = []
         for i in range(start, end + 1):
-            if names[i - 1].value != None:
+            if names[i - 1].value is not None:
                 x.append(cls(str(names[i - 1].value), str(ids[i - 1].value)))
         return x
 
@@ -111,18 +111,19 @@ class stock_codal:
 
     @staticmethod
     def find_period(line):
-        if line.find('1') != -1:
-            return 1
-        elif line.find('2') != -1:
-            return 2
-        elif line.find('3') != -1:
-            return 3
-        elif line.find('6') != -1:
-            return 6
+        # Check longer strings first to avoid substring false matches (e.g. '12' contains '1' and '2')
+        if line.find('12') != -1:
+            return 12
         elif line.find('9') != -1:
             return 9
-        elif line.find('12') != -1:
-            return 12
+        elif line.find('6') != -1:
+            return 6
+        elif line.find('3') != -1:
+            return 3
+        elif line.find('2') != -1:
+            return 2
+        elif line.find('1') != -1:
+            return 1
         else:
             return None
 
@@ -162,30 +163,11 @@ class stock_codal:
 
     @staticmethod
     def find_month(date):
-        if date.find('/01/') != -1:
-            return '01'
-        elif date.find('/02/') != -1:
-            return '02'
-        elif date.find('/03/') != -1:
-            return '03'
-        elif date.find('/04/') != -1:
-            return '04'
-        elif date.find('/05/') != -1:
-            return '05'
-        elif date.find('/06/') != -1:
-            return '06'
-        elif date.find('/07/') != -1:
-            return '07'
-        elif date.find('/08/') != -1:
-            return '08'
-        elif date.find('/09/') != -1:
-            return '09'
-        elif date.find('/10/') != -1:
-            return '10'
-        elif date.find('/11/') != -1:
-            return '11'
-        elif date.find('/12/') != -1:
-            return '12'
+        for month in ['01', '02', '03', '04', '05', '06',
+                      '07', '08', '09', '10', '11', '12']:
+            if f'/{month}/' in date:
+                return month
+        return None
 
     @staticmethod
     def open_browser(path):
@@ -251,7 +233,6 @@ class stock_codal:
                     if times == 5:
                         self.status = False
                         return True
-                        print(self.name, 'is a bad stock')
                     else:
                         time.sleep(1)
                         times += 1

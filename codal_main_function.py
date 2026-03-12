@@ -58,12 +58,11 @@ def codal_search_for_links(start, end):
             browser.get(stock.next_page_address(browser, stock_url, counting))
             time.sleep(2)
             print("SUCCESS___End extracting of page number " + str(counting) + " for stock " + stock.name)
-            counting += 1
         print("End finding links of stock", stock.name)
     for stock in names:
         if not stock.status:
             continue
-        print('Extraxting tag informations for stock ', stock.name)
+        print('Extracting tag informations for stock ', stock.name)
         stock.print_num_activities()
         j = 0
         while j < stock.num_activities:
@@ -91,7 +90,7 @@ def codal_search_for_links(start, end):
                 stock.all_fiscals[u].give_fiscal_link_get_table(browser, stock.id)
             u += 1
     for stock in names:
-        print('Extraxting tables for stock ', stock.name)
+        print('Extracting tables for stock ', stock.name)
         for j in range(stock.num_activities):
             stock.all_activities[j].symbol_analysis(stock.name, stock.id)
             print('activity number ', j + 1, ':')
